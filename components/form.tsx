@@ -2,7 +2,7 @@
 import React, { useState, FormEvent } from 'react';
 import { useSession } from 'next-auth/react';
 import Modal from "@/components/modal";
-
+import Image from 'next/image';
 
 //    console.log(session)
 
@@ -365,7 +365,7 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         <button type="submit" className={"group flex max-w-fit items-center justify-center space-x-2 border bg-blue-500 px-10 py-2 text-sm text-white transition-colors hover:bg-white hover:text-black rounded border-b-4 border-blue-700 hover:border-blue-500"}>
           {isLoading ? (
             <>
-            <img src="/heart_split.png" alt="loading"  className="w-6 h-6 animate-spin" width={25} height={25}/>
+            <Image src="/heart_split.png" alt="loading"  className="w-6 h-6 animate-spin" width={25} height={25}/>
             
             
             </>
@@ -388,7 +388,7 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         <div className="w-full overflow-hidden shadow-xl md:max-w-md md:rounded-2xl md:border md:border-gray-200">
         <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 bg-white px-4 py-6 pt-8 text-center md:px-16">
         <a href="https://codytech.dev">
-        <img
+        <Image
           src="/CardioBlue.png"
           alt="Cardio Logo"
           className="h-10 w-10 "

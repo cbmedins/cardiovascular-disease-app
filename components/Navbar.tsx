@@ -4,6 +4,7 @@ import Link from 'next/link'
 import useScroll from "@/lib/hooks/use-scroll";
 import { signIn, useSession } from 'next-auth/react';
 import UserDropdown from './user-dropdown';
+import Image from 'next/image';
 
 
 function Navbar() {
@@ -21,18 +22,18 @@ function Navbar() {
         } z-30 transition-all`}>
                 <div className="mx-5 flex h-16 max-w-screen-xl items-center justify-between w-full">
                     <Link href="/" className="flex items-center font-display text-2xl">
-                    <img
+                    <Image
                         src="/CardioBlue.png"
                         alt="cardiovascularDisease logo"
                         width="40"
                         height="40"
                         className="mr-2 rounded-sm"
                         >
-                    </img>
+                    </Image>
                     </Link>
 
                     <Link href="/dashboard" className="flex font-display text-2xl">
-                    <img
+                    <Image
                         src="/UGLogo.png"
                         alt="Universidad de Guayaquil logo"
                         width="37"
@@ -40,7 +41,7 @@ function Navbar() {
                         className="mr-2 rounded-sm"
                         >
                         
-                    </img>
+                    </Image>
                     </Link>
 
                     {session ? (
