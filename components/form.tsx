@@ -6,7 +6,7 @@ import Image from 'next/image';
 
 //    console.log(session)
 
-const form: React.FC = () => { 
+const Form: React.FC = () => { 
     const {data: session} = useSession()
 
     const [age, setCounter] = useState('0');
@@ -435,4 +435,4 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
   );
 };
 
-export default form;
+export default Form;
