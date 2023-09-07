@@ -32,7 +32,7 @@ function Navbar() {
                     </Image>
                     </Link>
 
-                    <Link href="/dashboard" className="flex font-display text-2xl">
+                    <Link href="https://www.ug.edu.ec/" className="flex font-display text-2xl">
                     <Image
                         src="/UGLogo.png"
                         alt="Universidad de Guayaquil logo"

@@ -23,10 +23,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cx(sfPro.variable, inter.variable)}>
-        <div />
+        <div/>
         <Providers>
         <Navbar/>
-        <main className="flex min-h-screen w-full flex-col items-center justify-center py-32">
+        <main className="flex min-h-screen w-full flex-col items-center justify-center py-32 bg-gradient-to-br from-orange-50 via-white to-red-100">
           {children}
         </main>
         </Providers>
