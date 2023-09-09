@@ -6,6 +6,35 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
+}
+
+// schema.prisma
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  username  String?
+  // Otros campos de usuario que puedas necesitar
+  formularios Formulario[] // Campo de relación opuesto a Formulario
+}
+
+model Formulario {
+  id              Int      @id @default(autoincrement())
+  userId          Int
+  user            User     @relation(fields: [userId], references: [id])
+  age             String
+  sex             String
+  chestPainType   String
+  restingBP       String
+  cholesterol     String
+  fastingBS       String
+  restingECG      String
+  maxHR           String
+  exerciseAngina  String
+  oldpeak         String
+  ST_Slope        String
+  predictionValue Int?
+  createdAt       DateTime @default(now())
 }
