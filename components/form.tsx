@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react';
 import Modal from "@/components/modal";
 import Image from 'next/image';
 
+import { PrismaClient } from '@prisma/client';
 //    console.log(session)
 
 const Form: React.FC = () => { 
@@ -25,30 +26,28 @@ const Form: React.FC = () => {
   
     const [predictionValue, setPredictionValue] = useState<number | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-  
-    const [error, setError] = useState<string | null>(null);
-  
+    const [error, setError] = useState<string | null>(null); 
     const [isLoading, setIsLoading] = useState(false);
   
 
-const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
     // Aquí puedes realizar acciones con los datos del formulario, como enviarlos a un servidor.
-    console.log('Age:', age);
-    console.log('Sex:', sex);
-    console.log('ChestPainType:', chestPainType);
-    console.log('RestingBP:', restingBP);
-    console.log('Cholesterol:', cholesterol);
-    console.log('FastingBS:', fastingBS);
-    console.log('RestingECG:', restingECG);
-    console.log('MaxHR:', maxHR);
-    console.log('ExerciseAngina:', exerciseAngina);
-    console.log('Oldpeak:', oldpeak);
-    console.log('ST_Slope:', ST_Slope);
+      console.log('Age:', age);
+      console.log('Sex:', sex);
+      console.log('ChestPainType:', chestPainType);
+      console.log('RestingBP:', restingBP);
+      console.log('Cholesterol:', cholesterol);
+      console.log('FastingBS:', fastingBS);
+      console.log('RestingECG:', restingECG);
+      console.log('MaxHR:', maxHR);
+      console.log('ExerciseAngina:', exerciseAngina);
+      console.log('Oldpeak:', oldpeak);
+      console.log('ST_Slope:', ST_Slope);
 
-    console.log('Session iniciada por: ', session?.user?.email)
-    
-    setIsLoading(true); // Inicia la carga
+      console.log('Session iniciada por: ', session?.user?.email)
+      
+      setIsLoading(true); // Inicia la carga
 
     const data = {
       Age: parseInt(age),
@@ -61,19 +60,29 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
       MaxHR: parseInt(maxHR),
       ExerciseAngina: parseInt(exerciseAngina),
       Oldpeak: parseFloat(oldpeak),
-      ST_Slope: parseInt(ST_Slope),
-
-    
-      
-    };
-    const mockApiResponse = {
-      ok: true,
-      json: async () => ({ prediction: 75 }),
+      ST_Slope: parseInt(ST_Slope),  
     };
 
-  try {
-   // const response = await fetch('https://modelo-docker.onrender.com/predict/', {
-    const response = await fetch('http://localhost:8000/predict/', {
+    const formData = {
+      age,
+      sex,
+      chestPainType,
+      restingBP,
+      cholesterol,
+      fastingBS,
+      restingECG,
+      maxHR,
+      exerciseAngina,
+      oldpeak,
+      ST_Slope,
+    };
+
+    // Imprimir el JSON que se va a enviar
+    console.log('Datos a enviar:', JSON.stringify(data, null, 2));
+
+    try {
+      // Realiza la solicitud a localhost para obtener la predicción
+      const predictionResponse = await fetch('http://localhost:8000/predict/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -81,28 +90,46 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         body: JSON.stringify(data),
       });
 
-      if (response.ok) {
-        const result = await response.json();
-        console.log('Resultado del servidor:', result);
-        setPredictionValue(result.prediction);
+      if (!predictionResponse.ok) {
+        console.error('Error al obtener la predicción de localhost.');
+        setError('Error al obtener la predicción de localhost.');
+        setIsLoading(false);
+        return;
+      }
 
-        
+      const predictionData = await predictionResponse.json();
 
+      // Envia los datos del formulario al servidor API
+      const submitResponse = await fetch('http://localhost:3000/api/submit-form', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...data,
+          userId: 1, // Reemplaza con el ID de usuario correcto
+          predictionValue: predictionData.prediction,
+        }),
+      });
 
-        // Abre el modal
-        setIsModalOpen(true);
+      if (!submitResponse.ok) {
+        console.error('Error al enviar los datos al servidor API.');
+        setError('Error al enviar los datos al servidor API.');
       } else {
-        console.error('Error al enviar los datos al servidor.');
-        setError('Error al enviar los datos al servidor.');
+        const savedFormData = await submitResponse.json();
+        console.log('Formulario guardado en el servidor API:', savedFormData.result);
+        setPredictionValue(predictionData.prediction);
+        setIsModalOpen(true);
       }
     } catch (error) {
       console.error('Error de conexión:', error);
-      setError('Error de conexión.  ');
+      setError('Error de conexión.');
     } finally {
-      setIsLoading(false); // Finaliza la carga, ya sea éxito o error
+      setIsLoading(false);
     }
   };
- 
+
+
   //console.log('Contenido de session:', //email);
 
   return (

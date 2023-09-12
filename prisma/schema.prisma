@@ -24,17 +24,17 @@ model Formulario {
   id              Int      @id @default(autoincrement())
   userId          Int
   user            User     @relation(fields: [userId], references: [id])
-  age             String
-  sex             String
-  chestPainType   String
-  restingBP       String
-  cholesterol     String
-  fastingBS       String
-  restingECG      String
-  maxHR           String
-  exerciseAngina  String
-  oldpeak         String
-  ST_Slope        String
+  Age             Int
+  Sex             Int
+  ChestPainType   Int
+  RestingBP       Int
+  Cholesterol     Int
+  FastingBS       Int
+  RestingECG      Int
+  MaxHR           Int
+  ExerciseAngina  Int
+  Oldpeak         Float
+  ST_Slope        Int
   predictionValue Int?
   createdAt       DateTime @default(now())
 }
